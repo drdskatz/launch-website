@@ -1,0 +1,79 @@
+---
+import "../styles/global.css";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+
+const {
+  title = "Launch IOP | Failure to Launch Program for Young Adults | Houston, TX",
+  description = "Launch IOP is an intensive outpatient program in Houston, TX, helping young adults overcome failure-to-launch patterns through evidence-based therapy, executive-function coaching, and real-world independence skills.",
+  path = "",
+  schema = null,
+} = Astro.props;
+
+const canonical = new URL(path, Astro.site).href;
+
+const orgSchema = {
+  "@context": "https://schema.org",
+  "@type": "MedicalClinic",
+  "name": "Launch IOP",
+  "description": "Intensive outpatient program in Houston, Texas for young adults experiencing failure-to-launch patterns.",
+  "url": "https://www.launchiop.com",
+  "telephone": "+1-713-482-1590",
+  "email": "info@launchiop.com",
+  "priceRange": "$1,500 per week",
+  "medicalSpecialty": "Psychiatric",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "4646 Wild Indigo Street, Suite 150",
+    "addressLocality": "Houston",
+    "addressRegion": "TX",
+    "postalCode": "77027",
+    "addressCountry": "US"
+  },
+  "areaServed": { "@type": "City", "name": "Houston" }
+};
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonical} />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Hanken+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <script type="application/ld+json" set:html={JSON.stringify(orgSchema)} />
+  {schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
+</head>
+<body>
+  <Header path={path} />
+  <main>
+    <slot />
+  </main>
+  <Footer />
+  <script>
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+      }, { threshold: 0.12 });
+      document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+      const p = document.getElementById('traj');
+      if (p) {
+        const len = p.getTotalLength();
+        p.style.strokeDasharray = len; p.style.strokeDashoffset = len;
+        setTimeout(() => { p.style.transition = 'stroke-dashoffset 1.8s ease'; p.style.strokeDashoffset = '0'; }, 300);
+      }
+    } else {
+      document.querySelectorAll('.reveal').forEach((el) => el.classList.add('in'));
+    }
+  </script>
+</body>
+</html>

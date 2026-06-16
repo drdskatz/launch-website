@@ -1,0 +1,30 @@
+---
+const { path = "" } = Astro.props;
+const links = [
+  { href: "/program", label: "Program" },
+  { href: "/how-it-works", label: "How It Works" },
+  { href: "/team", label: "Team" },
+  { href: "/faq", label: "FAQ" },
+  { href: "/contact", label: "Referrals" },
+];
+---
+<header class="site">
+  <div class="wrap nav">
+    <a href="/" class="brand">Launch</a>
+    <ul class="navlinks" id="navlinks">
+      {links.map((l) => (
+        <li><a href={l.href} aria-current={path === l.href ? "page" : undefined}>{l.label}</a></li>
+      ))}
+    </ul>
+    <div class="nav-cta">
+      <a href="tel:7134821590" class="nav-phone">713-482-1590</a>
+      <a href="/contact" class="btn btn-primary" style="padding:11px 24px;">Get Started</a>
+    </div>
+    <button class="menu-btn" id="menuBtn" aria-label="Menu">&#9776;</button>
+  </div>
+</header>
+<script>
+  document.getElementById('menuBtn')?.addEventListener('click', () => {
+    document.getElementById('navlinks')?.classList.toggle('open');
+  });
+</script>

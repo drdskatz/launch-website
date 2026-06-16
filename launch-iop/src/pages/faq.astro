@@ -1,0 +1,45 @@
+---
+import Base from "../layouts/Base.astro";
+const title = "Frequently Asked Questions | Launch IOP Houston";
+const description = "Answers about failure to launch, intensive outpatient programs (IOP), cost, insurance, program length, and location for Launch IOP in Houston, TX.";
+
+const faqs = [
+  { q: "What is \"failure to launch\"?", a: "Failure to launch describes a pattern in which a capable young adult struggles to move into the typical milestones of independent adulthood — steady school or work, social connection, and self-management — often alongside anxiety, depression, or avoidance. It isn't a formal diagnosis, but it's a recognizable pattern that responds well to structured support." },
+  { q: "What is an intensive outpatient program (IOP)?", a: "An IOP is a level of mental-health care more structured than weekly therapy, but flexible enough that participants continue living at home. At Launch, that means at least ten hours of treatment per week across several days, blending group, individual, and family work." },
+  { q: "Who is Launch IOP for?", a: "Young adults — typically ages 18–30 — who feel stuck: disengaged from school or work, avoiding responsibilities or social situations, and relying heavily on family for structure. Families and referring clinicians often reach out when traditional weekly therapy hasn't created enough momentum." },
+  { q: "How long is the program?", a: "Most participants attend 3–5 days per week, 3–4 hours per day, for 8–12 weeks, progressing through three phases: Lift-Off, Ascent, and Orbit." },
+  { q: "How much does it cost, and do you take insurance?", a: "The program is $1,500 per week, which includes at least ten hours of treatment. Optional services cost extra. Launch does not bill insurance directly, but we provide itemized invoices (superbills) you can submit for possible out-of-network reimbursement." },
+  { q: "Where are you located?", a: "Launch IOP is in Houston, TX, at 4646 Wild Indigo Street, Suite 150 (77027), on the first floor of the Amtex Insurance building. We share offices with Houston Therapy." },
+];
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqs.map((f) => ({
+    "@type": "Question",
+    "name": f.q,
+    "acceptedAnswer": { "@type": "Answer", "text": f.a },
+  })),
+};
+---
+<Base title={title} description={description} path="/faq" schema={schema}>
+  <section class="page-hero">
+    <div class="wrap">
+      <p class="eyebrow">Common Questions</p>
+      <h1>What families <em>ask us most</em></h1>
+    </div>
+  </section>
+
+  <section class="rule-top">
+    <div class="wrap reveal">
+      <div class="faq">
+        {faqs.map((f, i) => (
+          <details open={i === 0}>
+            <summary>{f.q}</summary>
+            <div class="a">{f.a}</div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+</Base>

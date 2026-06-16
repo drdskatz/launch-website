@@ -7,7 +7,7 @@ import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
   site: 'https://launch-website-ebon.vercel.app',
-  output: 'hybrid',
+  output: 'static',
   adapter: vercel(),
   integrations: [react(), markdoc(), keystatic(), sitemap()],
 });

@@ -120,10 +120,32 @@ section{padding:96px 0;}
 .cost li{padding:13px 0;border-bottom:1px solid rgba(241,235,223,.16);color:rgba(241,235,223,.9);font-weight:300;}
 
 .team{display:grid;grid-template-columns:repeat(4,1fr);gap:36px 28px;}
-.member{text-align:center;}
+.member{text-align:center;display:block;text-decoration:none;color:inherit;transition:transform 0.2s ease;}
+.member:hover{transform:translateY(-3px);}
+.member:hover .name{color:var(--taupe-deep);}
+.member:hover .ph{border-color:var(--taupe);}
+.member img.ph{object-fit:cover;display:block;transition:border-color 0.2s ease;}
 .member .ph{width:120px;height:120px;margin:0 auto;border-radius:50%;background:var(--white);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:2rem;color:var(--taupe-deep);}
 .member .name{font-family:var(--display);font-size:1.25rem;font-weight:500;margin-top:16px;}
 .member .role{color:var(--muted);font-size:0.78rem;letter-spacing:0.08em;text-transform:uppercase;margin-top:4px;}
+.member-page{padding:64px 0 88px;}
+.back-link{display:inline-block;font-size:0.74rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--taupe-deep);text-decoration:none;margin-bottom:40px;}
+.back-link:hover{color:var(--ink);}
+.member-head{display:flex;align-items:center;gap:40px;padding-bottom:36px;border-bottom:1px solid var(--line);}
+.member-photo{width:220px;height:220px;flex:0 0 220px;border-radius:50%;object-fit:cover;border:1px solid var(--line);background:var(--white);}
+.member-photo-fallback{display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:3.4rem;color:var(--taupe-deep);}
+.member-intro h1{font-size:2.6rem;margin:6px 0 0;}
+.member-intro .member-role{color:var(--muted);font-size:0.82rem;letter-spacing:0.1em;text-transform:uppercase;margin:10px 0 0;}
+.member-intro .member-link{display:inline-block;margin-top:18px;font-size:0.74rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--taupe-deep);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px;}
+.member-intro .member-link:hover{border-color:var(--taupe-deep);}
+.member-bio{max-width:64ch;margin:40px 0 0;}
+.member-bio p{color:var(--ink-soft);font-weight:300;margin:0 0 20px;}
+.member-cta{margin-top:24px;}
+@media(max-width:680px){
+  .member-head{flex-direction:column;text-align:center;gap:24px;}
+  .member-photo{width:160px;height:160px;flex-basis:160px;}
+  .member-intro h1{font-size:2.1rem;}
+}
 
 .faq{max-width:780px;margin:0 auto;}
 .faq details{border-bottom:1px solid var(--line);}

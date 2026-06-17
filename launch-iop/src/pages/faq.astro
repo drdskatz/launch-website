@@ -21,6 +21,16 @@ const schema = {
     "acceptedAnswer": { "@type": "Answer", "text": f.a },
   })),
 };
+
+function escapeHtml(s) {
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+function withLinks(text) {
+  return escapeHtml(text).replace(
+    /Houston Therapy/g,
+    '<a href="https://www.houston-therapy.com/" target="_blank" rel="noopener">Houston Therapy</a>'
+  );
+}
 ---
 <Base title={title} description={description} path="/faq" schema={schema}>
   <section class="page-hero">
@@ -36,7 +46,7 @@ const schema = {
         {faqs.map((f, i) => (
           <details open={i === 0}>
             <summary>{f.q}</summary>
-            <div class="a">{f.a}</div>
+            <div class="a" set:html={withLinks(f.a)} />
           </details>
         ))}
       </div>

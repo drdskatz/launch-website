@@ -41,6 +41,7 @@ export default config({
     homepage: singleton({
       label: 'Homepage Text',
       path: 'src/content/homepage',
+      format: { data: 'yaml' },
       schema: {
         heroHeadline: fields.text({ label: 'Hero Headline' }),
         heroSubheadline: fields.text({ label: 'Hero Subheadline', multiline: true }),

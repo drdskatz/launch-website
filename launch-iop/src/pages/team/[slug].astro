@@ -42,6 +42,16 @@ export function getStaticPaths() {
     });
 }
 
+function escapeHtml(s) {
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+function withLinks(text) {
+  return escapeHtml(text).replace(
+    /Houston Therapy/g,
+    '<a href="https://www.houston-therapy.com/" target="_blank" rel="noopener">Houston Therapy</a>'
+  );
+}
+
 const { name, role, photo, initials, linkedin, paragraphs } = Astro.props;
 const { slug } = Astro.params;
 const nameOnly = name.split(",")[0];
@@ -77,7 +87,7 @@ const schema = {
         </div>
       </div>
       <div class="member-bio">
-        {paragraphs.map((p) => <p>{p}</p>)}
+        {paragraphs.map((p) => <p set:html={withLinks(p)} />)}
       </div>
       <a class="btn btn-primary member-cta" href="/contact">Start the conversation</a>
     </div>

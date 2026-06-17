@@ -1,0 +1,85 @@
+---
+import Base from "../../layouts/Base.astro";
+import fs from "node:fs";
+import yaml from "js-yaml";
+
+const teamDir = "src/content/team";
+
+export function getStaticPaths() {
+  const dir = "src/content/team";
+  if (!fs.existsSync(dir)) return [];
+  return fs
+    .readdirSync(dir)
+    .filter((f) => f.endsWith(".yaml"))
+    .map((f) => {
+      const slug = f.replace(/\.yaml$/, "");
+      const data = yaml.load(fs.readFileSync(`${dir}/${f}`, "utf-8")) || {};
+      const name = data.name || "";
+      let photo = data.photo || "";
+      if (photo && !photo.startsWith("/") && !photo.startsWith("http")) {
+        photo = "/images/team/" + photo;
+      }
+      const initials = name
+        .replace(/,.*$/, "")
+        .split(/\s+/)
+        .filter(Boolean)
+        .slice(0, 2)
+        .map((w) => w[0])
+        .join("")
+        .toUpperCase();
+      const paragraphs = (data.bio || "").split(/\n+/).map((p) => p.trim()).filter(Boolean);
+      return {
+        params: { slug },
+        props: {
+          name,
+          role: data.title || "",
+          photo,
+          initials,
+          linkedin: data.linkedin || "",
+          paragraphs,
+        },
+      };
+    });
+}
+
+const { name, role, photo, initials, linkedin, paragraphs } = Astro.props;
+const { slug } = Astro.params;
+const nameOnly = name.split(",")[0];
+const title = `${name} | Launch IOP Houston`;
+const description = paragraphs[0]
+  ? paragraphs[0].slice(0, 155)
+  : `${name}, ${role} at Launch IOP in Houston.`;
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": nameOnly,
+  "jobTitle": role,
+  "worksFor": { "@type": "MedicalClinic", "name": "Launch IOP" },
+  "url": `https://www.launchiop.com/team/${slug}`,
+};
+---
+<Base title={title} description={description} path={`/team/${slug}`} schema={schema}>
+  <section class="member-page">
+    <div class="wrap">
+      <a class="back-link" href="/team">&larr; All clinicians</a>
+      <div class="member-head">
+        {photo
+          ? <img class="member-photo" src={photo} alt={name} width="220" height="220" />
+          : <div class="member-photo member-photo-fallback">{initials}</div>}
+        <div class="member-intro">
+          <p class="eyebrow">Clinical Team</p>
+          <h1>{name}</h1>
+          <p class="member-role">{role}</p>
+          {linkedin && (
+            <a class="member-link" href={linkedin} target="_blank" rel="noopener">LinkedIn &rarr;</a>
+          )}
+        </div>
+      </div>
+      <div class="member-bio">
+        {paragraphs.map((p) => <p>{p}</p>)}
+      </div>
+      <a class="btn btn-primary member-cta" href="/contact">Start the conversation</a>
+    </div>
+  </section>
+</Base>

@@ -11,9 +11,14 @@ export default config({
       label: 'Team Members',
       slugField: 'name',
       path: 'launch-iop/src/content/team/*',
+      format: { data: 'yaml' },
       schema: {
         name: fields.slug({ name: { label: 'Full Name' } }),
         title: fields.text({ label: 'Title / Role' }),
+        order: fields.integer({
+          label: 'Display Order (lower numbers appear first)',
+          defaultValue: 0,
+        }),
         bio: fields.text({ label: 'Bio', multiline: true }),
         photo: fields.image({
           label: 'Photo',

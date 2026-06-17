@@ -12,9 +12,9 @@ const homepage = yaml.load(
     <div class="wrap hero-grid">
       <div>
         <p class="eyebrow">Intensive Outpatient Program &middot; Houston, TX</p>
-        <h1>A structured path for young adults ready to <em>launch</em></h1>
-        <p class="lead">Move from feeling stuck to moving forward &mdash; with real support, real structure, and real skills for adult life.</p>
-        <p class="sub">Launch IOP helps young adults build independence, confidence, and readiness through evidence-based therapy, executive-function coaching, and hands-on life-skills practice.</p>
+       <h1 set:html={homepage.heroHeadline}></h1>
+        <p class="lead" set:html={homepage.heroSubheadline}></p>
+        <p class="sub" set:html={homepage.introText}></p>
         <div class="hero-cta">
           <a href="/contact" class="btn btn-primary">Start the conversation</a>
           <a href="/how-it-works" class="btn btn-ghost">See how it works</a>

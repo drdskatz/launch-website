@@ -1,5 +1,11 @@
 ---
 import Base from "../layouts/Base.astro";
+import fs from "node:fs";
+import yaml from "js-yaml";
+
+const homepage = yaml.load(
+  fs.readFileSync("src/content/homepage/index.yaml", "utf-8")
+);
 ---
 <Base path="/">
   <section class="hero">

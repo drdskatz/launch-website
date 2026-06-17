@@ -1,18 +1,44 @@
 ---
 import Base from "../layouts/Base.astro";
+import fs from "node:fs";
+import yaml from "js-yaml";
+
 const title = "Our Clinical Team | Launch IOP Houston";
 const description = "Meet the licensed clinicians behind Launch IOP — therapists and psychologists who specialize in helping young adults in Houston build independence.";
 
-const members = [
-  { initials: "DK", name: "Daniel Katz, Psy.D.", role: "Co-Founder" },
-  { initials: "AB", name: "Adam Brownstein, LPC", role: "Co-Founder" },
-  { initials: "CC", name: "Claire Cooper, LCSW", role: "Clinical Director" },
-  { initials: "SM", name: "Shea McTaggart, Psy.D.", role: "Assessment" },
-  { initials: "ES", name: "Elizabeth Seabolt-Esparza, LPC", role: "Therapist" },
-  { initials: "EB", name: "Emma Barr, LPA", role: "Assessment & Therapy" },
-  { initials: "DB", name: "Dana Boyko, LCSW", role: "Therapist" },
-  { initials: "JB", name: "Joe Bartolotta, MBA, LMSW", role: "Therapist" },
-];
+const teamDir = "src/content/team";
+let members = [];
+if (fs.existsSync(teamDir)) {
+  members = fs
+    .readdirSync(teamDir)
+    .filter((f) => f.endsWith(".yaml"))
+    .map((f) => {
+      const data = yaml.load(fs.readFileSync(`${teamDir}/${f}`, "utf-8")) || {};
+      const name = data.name || "";
+      let photo = data.photo || "";
+      if (photo && !photo.startsWith("/") && !photo.startsWith("http")) {
+        photo = "/images/team/" + photo;
+      }
+      const initials = name
+        .replace(/,.*$/, "")
+        .split(/\s+/)
+        .filter(Boolean)
+        .slice(0, 2)
+        .map((w) => w[0])
+        .join("")
+        .toUpperCase();
+      return {
+        name,
+        role: data.title || "",
+        bio: data.bio || "",
+        photo,
+        linkedin: data.linkedin || "",
+        order: typeof data.order === "number" ? data.order : 0,
+        initials,
+      };
+    })
+    .sort((a, b) => a.order - b.order || a.name.localeCompare(b.name));
+}
 
 const schema = {
   "@context": "https://schema.org",
@@ -31,7 +57,7 @@ const schema = {
     <div class="wrap">
       <p class="eyebrow">Meet the Team</p>
       <h1>Licensed clinicians who specialize in <em>young adults</em></h1>
-      <p><span class="placeholder-note">Editable later in your CMS</span> &nbsp; Full bios and credentials will live on individual pages for trust &amp; search.</p>
+      <p>Each clinician brings specialized training in young-adult mental health. Get to know the people who&rsquo;ll be in the room with you.</p>
     </div>
   </section>
 
@@ -40,9 +66,15 @@ const schema = {
       <div class="team">
         {members.map((m) => (
           <div class="member">
-            <div class="ph">{m.initials}</div>
+            {m.photo
+              ? <img class="ph" src={m.photo} alt={m.name} width="120" height="120" />
+              : <div class="ph">{m.initials}</div>}
             <div class="name">{m.name}</div>
             <div class="role">{m.role}</div>
+            {m.bio && <p class="bio">{m.bio}</p>}
+            {m.linkedin && (
+              <a class="member-link" href={m.linkedin} target="_blank" rel="noopener">LinkedIn &rarr;</a>
+            )}
           </div>
         ))}
       </div>

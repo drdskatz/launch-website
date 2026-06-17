@@ -13,6 +13,7 @@ if (fs.existsSync(teamDir)) {
     .readdirSync(teamDir)
     .filter((f) => f.endsWith(".yaml"))
     .map((f) => {
+      const slug = f.replace(/\.yaml$/, "");
       const data = yaml.load(fs.readFileSync(`${teamDir}/${f}`, "utf-8")) || {};
       const name = data.name || "";
       let photo = data.photo || "";
@@ -28,11 +29,10 @@ if (fs.existsSync(teamDir)) {
         .join("")
         .toUpperCase();
       return {
+        slug,
         name,
         role: data.title || "",
-        bio: data.bio || "",
         photo,
-        linkedin: data.linkedin || "",
         order: typeof data.order === "number" ? data.order : 0,
         initials,
       };
@@ -49,6 +49,7 @@ const schema = {
     "@type": "Person",
     "name": m.name.split(",")[0],
     "jobTitle": m.role,
+    "url": `https://www.launchiop.com/team/${m.slug}`,
   })),
 };
 ---
@@ -57,7 +58,7 @@ const schema = {
     <div class="wrap">
       <p class="eyebrow">Meet the Team</p>
       <h1>Licensed clinicians who specialize in <em>young adults</em></h1>
-      <p>Each clinician brings specialized training in young-adult mental health. Get to know the people who&rsquo;ll be in the room with you.</p>
+      <p>Each clinician brings specialized training in young-adult mental health. Select a clinician to read their full bio.</p>
     </div>
   </section>
 
@@ -65,17 +66,13 @@ const schema = {
     <div class="wrap reveal">
       <div class="team">
         {members.map((m) => (
-          <div class="member">
+          <a class="member" href={`/team/${m.slug}`}>
             {m.photo
               ? <img class="ph" src={m.photo} alt={m.name} width="120" height="120" />
               : <div class="ph">{m.initials}</div>}
             <div class="name">{m.name}</div>
             <div class="role">{m.role}</div>
-            {m.bio && <p class="bio">{m.bio}</p>}
-            {m.linkedin && (
-              <a class="member-link" href={m.linkedin} target="_blank" rel="noopener">LinkedIn &rarr;</a>
-            )}
-          </div>
+          </a>
         ))}
       </div>
     </div>

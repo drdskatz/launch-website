@@ -8,6 +8,7 @@ const {
   description = "Launch IOP is an intensive outpatient program in Houston, TX, helping young adults overcome failure-to-launch patterns through evidence-based therapy, executive-function coaching, and real-world independence skills.",
   path = "",
   schema = null,
+  ogType = "website",
 } = Astro.props;
 
 const canonical = new URL(path, Astro.site).href;
@@ -22,6 +23,13 @@ const orgSchema = {
   "email": "info@launchiop.com",
   "priceRange": "$1,500 per week",
   "medicalSpecialty": "Psychiatric",
+  "logo": "https://www.launchiop.com/favicon.svg",
+  "hasMap": "https://maps.google.com/?q=4646+Wild+Indigo+Street+Suite+150+Houston+TX+77027",
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 29.7392,
+    "longitude": -95.4621
+  },
   "address": {
     "@type": "PostalAddress",
     "streetAddress": "4646 Wild Indigo Street, Suite 150",
@@ -32,6 +40,46 @@ const orgSchema = {
   },
   "areaServed": { "@type": "City", "name": "Houston" }
 };
+
+// Auto-generate BreadcrumbList for all non-home pages
+const segmentLabels = {
+  "program": "Program",
+  "how-it-works": "How It Works",
+  "team": "Team",
+  "faq": "FAQ",
+  "contact": "Referrals",
+};
+
+const pathSegments = path.replace(/^\//, "").split("/").filter(Boolean);
+let breadcrumbSchema = null;
+if (pathSegments.length > 0) {
+  const items = [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.launchiop.com/" }
+  ];
+  let builtPath = "";
+  pathSegments.forEach((seg, i) => {
+    builtPath += "/" + seg;
+    const isLast = i === pathSegments.length - 1;
+    const label = segmentLabels[seg] || (isLast ? title.split("|")[0].trim() : seg);
+    items.push({
+      "@type": "ListItem",
+      "position": i + 2,
+      "name": label,
+      "item": `https://www.launchiop.com${builtPath}`
+    });
+  });
+  breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": items
+  };
+}
+
+// Normalize page-specific schemas into an array and append breadcrumb
+const extraSchemas = [
+  ...(schema ? (Array.isArray(schema) ? schema : [schema]) : []),
+  ...(breadcrumbSchema ? [breadcrumbSchema] : []),
+];
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -42,7 +90,7 @@ const orgSchema = {
   <meta name="description" content={description} />
   <link rel="canonical" href={canonical} />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <meta property="og:type" content="website" />
+  <meta property="og:type" content={ogType} />
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
   <meta property="og:url" content={canonical} />
@@ -51,7 +99,7 @@ const orgSchema = {
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Hanken+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <script type="application/ld+json" set:html={JSON.stringify(orgSchema)} />
-  {schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
+  {extraSchemas.map(s => <script type="application/ld+json" set:html={JSON.stringify(s)} />)}
 </head>
 <body>
   <Header path={path} />

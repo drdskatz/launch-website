@@ -6,8 +6,57 @@ import yaml from "js-yaml";
 const homepage = yaml.load(
   fs.readFileSync("src/content/homepage.yaml", "utf-8")
 );
+
+const schemas = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Launch IOP",
+    "url": "https://www.launchiop.com",
+    "description": "Intensive outpatient program for young adults in Houston, TX helping them overcome failure-to-launch patterns."
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": "Intensive Outpatient Program (IOP) for Young Adults",
+    "description": "A structured 8–12 week intensive outpatient program helping young adults ages 18–30 overcome failure-to-launch patterns through evidence-based therapy, executive-function coaching, and life-skills practice.",
+    "provider": {
+      "@type": "MedicalClinic",
+      "name": "Launch IOP",
+      "url": "https://www.launchiop.com"
+    },
+    "serviceType": "Mental Health Treatment",
+    "audience": {
+      "@type": "PeopleAudience",
+      "suggestedMinAge": 18,
+      "suggestedMaxAge": 30
+    },
+    "areaServed": {
+      "@type": "City",
+      "name": "Houston"
+    },
+    "url": "https://www.launchiop.com/program",
+    "offers": {
+      "@type": "Offer",
+      "price": "1500",
+      "priceCurrency": "USD",
+      "description": "At least 10 hours of treatment per week"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "DefinedTerm",
+    "name": "Failure to Launch",
+    "description": "A pattern in which a capable young adult struggles to move into the typical milestones of independent adulthood — steady school or work, social connection, and self-management — often alongside anxiety, depression, or avoidance. It is not a formal diagnosis but a recognizable pattern that responds well to structured support.",
+    "inDefinedTermSet": {
+      "@type": "DefinedTermSet",
+      "name": "Launch IOP Glossary",
+      "url": "https://www.launchiop.com/faq"
+    }
+  }
+];
 ---
-<Base path="/">
+<Base path="/" schema={schemas}>
   <section class="hero">
     <div class="wrap hero-grid">
       <div>
@@ -21,10 +70,10 @@ const homepage = yaml.load(
         </div>
       </div>
       <div class="trajectory" aria-hidden="true">
-        <svg viewBox="0 0 420 375" role="img">
+        <svg viewBox="0 0 420 360" role="img">
           <path class="path-bg" d="M28,320 C150,312 188,196 236,138 C282,82 332,60 392,40" />
           <path class="path-line" id="traj" d="M28,320 C150,312 188,196 236,138 C282,82 332,60 392,40" />
-        <g class="node"><circle cx="28" cy="320" r="6"></circle><text x="28" y="342" class="lab" text-anchor="middle">Lift-Off</text><text x="28" y="358" class="meta" text-anchor="middle">Weeks 1&ndash;2</text></g>
+          <g class="node"><circle cx="28" cy="320" r="6"></circle><text x="44" y="316" class="lab">Lift-Off</text><text x="44" y="334" class="meta">Weeks 1&ndash;2</text></g>
           <g class="node"><circle cx="236" cy="138" r="6"></circle><text x="252" y="134" class="lab">Ascent</text><text x="252" y="152" class="meta">Weeks 3&ndash;8</text></g>
           <g class="node"><circle cx="392" cy="40" r="6"></circle><text x="300" y="30" class="lab">Orbit</text><text x="300" y="48" class="meta">Weeks 9&ndash;12</text></g>
         </svg>

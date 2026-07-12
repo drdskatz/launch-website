@@ -6,7 +6,7 @@ import markdoc from '@astrojs/markdoc';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  site: 'https://launch-website-ebon.vercel.app',
+  site: 'https://www.launchiop.com',
   output: 'static',
   adapter: vercel(),
   integrations: [react(), markdoc(), keystatic(), sitemap()],

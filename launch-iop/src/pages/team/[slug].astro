@@ -65,11 +65,16 @@ const schema = {
   "@type": "Person",
   "name": nameOnly,
   "jobTitle": role,
-  "worksFor": { "@type": "MedicalClinic", "name": "Launch IOP" },
+  "description": paragraphs[0] ? paragraphs[0].slice(0, 300) : undefined,
+  "worksFor": {
+    "@type": "MedicalClinic",
+    "name": "Launch IOP",
+    "url": "https://www.launchiop.com"
+  },
   "url": `https://www.launchiop.com/team/${slug}`,
 };
 ---
-<Base title={title} description={description} path={`/team/${slug}`} schema={schema}>
+<Base title={title} description={description} path={`/team/${slug}`} schema={schema} ogType="profile">
   <section class="member-page">
     <div class="wrap">
       <a class="back-link" href="/team">&larr; All clinicians</a>
